@@ -1,3 +1,7 @@
+/* @author Byron Omar Almeida Coello
+ * @version 1.0
+ * @license MIT
+ */
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
