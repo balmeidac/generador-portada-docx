@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Java
+*.class
+*.log
+
+# Archivos generados
+*.docx
+!docs/*.docx
+
+# Logos institucionales (opcional: quita estas líneas si decides subirlos)
+src/logo_universidad.png
+src/logo_facultad.png
