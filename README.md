@@ -51,7 +51,10 @@ java -jar GeneradorPortada.jar
 ## Uso
 
 Completa la ventana y pulsa **Generar documento**:
-<img src="docs/ventana.png" alt="Ventana del programa" width="420">
+
+<p align="center">
+  <img src="docs/ventana.png" alt="Ventana del programa" width="420">
+</p>
 
 | Campo | Descripción |
 |---|---|
