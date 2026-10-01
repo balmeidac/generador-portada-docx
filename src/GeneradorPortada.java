@@ -1,7 +1,3 @@
-/* @author Byron Omar Almeida Coello
- * @version 1.0
- * @license MIT
- */
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -18,9 +14,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Generador de portada UTEQ (.docx, A4) sin librerías externas.
- * Los logos (logo_universidad.png y logo_facultad.png) deben estar junto a esta clase
- * (en la raíz de "src" en IntelliJ) o en la carpeta desde donde se ejecuta el programa.
+ * Generador de portada académica UTEQ (.docx, A4) sin librerías externas.
+ * Los logos (logo_universidad.png y logo_facultad.png) son opcionales: si existen junto a esta clase
+ * (en la raíz de "src" en IntelliJ) o en la carpeta desde donde se ejecuta el programa, se insertan.
+ *
+ * @author Byron Omar Almeida Coello
+ * @version 1.0
+ * @license MIT
  */
 public class GeneradorPortada {
 
@@ -187,9 +187,9 @@ public class GeneradorPortada {
             body.append(par("<w:spacing w:before=\"0\" w:after=\"240\" w:line=\"240\" w:lineRule=\"auto\"/><w:jc w:val=\"center\"/>",
                     logos.toString()));
         }
-        body.append(centro(UNIVERSIDAD, 28, 0, 120));
-        body.append(centro(FACULTAD_1, 28, 0, 120));
-        body.append(centro(FACULTAD_2, 28, 0, 360));
+        body.append(centro(UNIVERSIDAD, 36, 0, 160));
+        body.append(centro(FACULTAD_1, 32, 0, 120));
+        body.append(centro(FACULTAD_2, 32, 0, 360));
         body.append(centro(CARRERA, 28, 0, 480));
         body.append(centro(materia, 26, 0, 360));
         body.append(centro(PARALELO, 26, 0, 480));
