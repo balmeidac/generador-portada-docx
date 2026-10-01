@@ -115,6 +115,11 @@ public class GeneradorPortada {
                 prefs.put("autorPropiedades", txtPropiedades.getText().trim());
                 generar(materia, tema, (String) cmbTipo.getSelectedItem(), autor, docente,
                         (Integer) spnHojas.getValue(), destino, propiedades);
+                if (leerLogo(LOGO_UNIVERSIDAD) == null || leerLogo(LOGO_FACULTAD) == null) {
+                    JOptionPane.showMessageDialog(f, "No se encontraron los logos (" + LOGO_UNIVERSIDAD + " y "
+                            + LOGO_FACULTAD + ").\nEl documento se generó sin ellos. Colócalos junto al programa para incluirlos.",
+                            "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                }
                 if (JOptionPane.showConfirmDialog(f, "Documento generado.\n¿Deseas abrirlo ahora?",
                         "Listo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     try {
@@ -163,15 +168,21 @@ public class GeneradorPortada {
         byte[] logoUni = leerLogo(LOGO_UNIVERSIDAD);
         byte[] logoFac = leerLogo(LOGO_FACULTAD);
         long anchoLogo = cm(3.7);
-        long altoUni = anchoLogo * alto(logoUni) / ancho(logoUni);
-        long altoFac = anchoLogo * alto(logoFac) / ancho(logoFac);
+        StringBuilder logos = new StringBuilder();
+        if (logoUni != null) {
+            logos.append(imagen("rId4", "Logo universidad", anchoLogo, anchoLogo * alto(logoUni) / ancho(logoUni)));
+        }
+        if (logoUni != null && logoFac != null) logos.append(run("   ", 28, false, false));
+        if (logoFac != null) {
+            logos.append(imagen("rId5", "Logo facultad", anchoLogo, anchoLogo * alto(logoFac) / ancho(logoFac)));
+        }
 
         // ---- Portada ----
         StringBuilder body = new StringBuilder();
-        body.append(par("<w:spacing w:before=\"0\" w:after=\"240\" w:line=\"240\" w:lineRule=\"auto\"/><w:jc w:val=\"center\"/>",
-                imagen("rId4", "Logo universidad", anchoLogo, altoUni)
-                        + run("   ", 28, false, false)
-                        + imagen("rId5", "Logo facultad", anchoLogo, altoFac)));
+        if (logos.length() > 0) {
+            body.append(par("<w:spacing w:before=\"0\" w:after=\"240\" w:line=\"240\" w:lineRule=\"auto\"/><w:jc w:val=\"center\"/>",
+                    logos.toString()));
+        }
         body.append(centro(UNIVERSIDAD, 28, 0, 120));
         body.append(centro(FACULTAD_1, 28, 0, 120));
         body.append(centro(FACULTAD_2, 28, 0, 360));
@@ -282,8 +293,8 @@ public class GeneradorPortada {
                 + "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>"
                 + "<Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header\" Target=\"header1.xml\"/>"
                 + "<Relationship Id=\"rId3\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer\" Target=\"footer1.xml\"/>"
-                + "<Relationship Id=\"rId4\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/logo_universidad.png\"/>"
-                + "<Relationship Id=\"rId5\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/logo_facultad.png\"/>"
+                + (logoUni == null ? "" : "<Relationship Id=\"rId4\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/logo_universidad.png\"/>")
+                + (logoFac == null ? "" : "<Relationship Id=\"rId5\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/image\" Target=\"media/logo_facultad.png\"/>")
                 + relsFiguras
                 + "</Relationships>";
 
@@ -297,8 +308,8 @@ public class GeneradorPortada {
             escribir(zip, "word/styles.xml", estilos.getBytes(StandardCharsets.UTF_8));
             escribir(zip, "word/header1.xml", encabezado.getBytes(StandardCharsets.UTF_8));
             escribir(zip, "word/footer1.xml", pie.getBytes(StandardCharsets.UTF_8));
-            escribir(zip, "word/media/logo_universidad.png", logoUni);
-            escribir(zip, "word/media/logo_facultad.png", logoFac);
+            if (logoUni != null) escribir(zip, "word/media/logo_universidad.png", logoUni);
+            if (logoFac != null) escribir(zip, "word/media/logo_facultad.png", logoFac);
             for (Map.Entry<String, byte[]> e : partes.entrySet()) escribir(zip, e.getKey(), e.getValue());
         }
     }
@@ -322,7 +333,7 @@ public class GeneradorPortada {
         }
         File f = new File(nombre);
         if (f.exists()) return java.nio.file.Files.readAllBytes(f.toPath());
-        throw new FileNotFoundException("No se encontró el logo \"" + nombre + "\". Colócalo junto al programa.");
+        return null;
     }
 
     static int ancho(byte[] png) throws IOException {
