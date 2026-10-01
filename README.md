@@ -33,9 +33,7 @@ java -jar GeneradorPortada.jar
 
 ### Desde el código
 
-1. Copia `logo_universidad.png` y `logo_facultad.png` junto a `GeneradorPortada.java`
-   (dentro de `src/`). Los logos no se incluyen en este repositorio.
-2. Compila y ejecuta:
+1. Compila y ejecuta (los logos son opcionales, ver sección *Logos*):
 
 ```bash
 cd src
@@ -51,8 +49,14 @@ En IntelliJ: abre la carpeta como proyecto, marca `src` como *Sources Root* y ej
 cd src
 javac --release 8 GeneradorPortada.java
 printf 'Main-Class: GeneradorPortada\n' > manifest.txt
-jar cfm GeneradorPortada.jar manifest.txt *.class *.png
+jar cfm GeneradorPortada.jar manifest.txt *.class
 ```
+
+## Logos
+
+Los logos institucionales **no se incluyen** en este repositorio. Si colocas `logo_universidad.png` y
+`logo_facultad.png` en la misma carpeta desde donde ejecutas el programa (o dentro del JAR / `src/`),
+se insertan en la portada. Si no están, el documento se genera igual, sin logos, y el programa avisa.
 
 ## Personalización
 
@@ -61,4 +65,4 @@ constantes al inicio de `GeneradorPortada.java`.
 
 ## Licencia
 
-MIT. Los logos pertenecen a la Universidad Técnica Estatal de Quevedo y a su facultad.
+MIT (solo el código). Los logos institucionales pertenecen a la Universidad Técnica Estatal de Quevedo y a su facultad.
